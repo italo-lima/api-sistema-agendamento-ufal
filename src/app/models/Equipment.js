@@ -4,9 +4,10 @@ class Equipment extends Model {
     static init(sequelize){
         super.init(
             {
-                owner: Sequelize.STRING,
                 name: Sequelize.STRING,
-                code: Sequelize.STRING
+                owner: Sequelize.STRING,
+                code: Sequelize.STRING,
+                active: Sequelize.BOOLEAN
             },
             {
                 sequelize

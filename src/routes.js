@@ -13,17 +13,21 @@ const routes = new Router()
 routes.post("/sessions", SessionController.store)
 
 routes.post("/users", UserController.store)
+routes.post("/equipment", EquipmentController.store)
+
+routes.use(authMiddleware)
+
+//rotas de usuários
+//routes.use("/users", CheckAdminMiddleware("admin"), UserController.show)
 routes.get("/users/:id", UserController.index)
 routes.get("/users", UserController.show)
 routes.put("/users/:id",  UserController.update)
 routes.delete("/users/:id", UserController.delete)
 
-//routes.post("/equipment", EquipmentController.store)
-
-//routes.use(authMiddleware)
-//routes.use("/users", CheckAdminMiddleware("admin", "owner", "manager"), UserController.show)
-//routes.get("/users/:id", UserController.index)
-//routes.put("/users",  UserController.update)
-//routes.delete("/users/", UserController.delete)
+//rotas de equipamentos
+routes.get("/equipment", EquipmentController.show)
+routes.get("/equipment/:id", EquipmentController.index)
+routes.put("/equipment/:id", EquipmentController.update)
+routes.delete("/equipment/:id", EquipmentController.destroy)
 
 export default routes

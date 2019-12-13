@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
    
-      return queryInterface.createTable('equipments', 
+      return queryInterface.createTable("equipment", 
       { 
         id: {
           type: Sequelize.INTEGER,
@@ -11,16 +11,20 @@ module.exports = {
           autoIncrement: true,
           primaryKey: true
         },
-        owner:{
-          type: Sequelize.STRING,
-          allowNull: false
-        },
         name: {
           type: Sequelize.STRING,
           allowNull: false
         },
         code: {
           type: Sequelize.STRING,
+          allowNull: false
+        },
+        owner:{
+          type: Sequelize.STRING,
+          allowNull: false
+        },
+        active:{
+          type: Sequelize.BOOLEAN,
           allowNull: false
         },
         created_at: {
@@ -36,6 +40,6 @@ module.exports = {
 
   down: (queryInterface) => {
    
-      return queryInterface.dropTable('equipments');
+      return queryInterface.dropTable("equipment");
   }
 };
