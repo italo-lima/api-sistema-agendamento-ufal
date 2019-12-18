@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import UserController from "./app/controller/UserController"
 import EquipmentController from "./app/controller/EquipmentController"
+import RegisterController from "./app/controller/RegisterController"
 
 import SessionController from "./app/controller/SessionController"
 
@@ -29,5 +30,10 @@ routes.get("/equipment", EquipmentController.show)
 routes.get("/equipment/:id", EquipmentController.index)
 routes.put("/equipment/:id", EquipmentController.update)
 routes.delete("/equipment/:id", EquipmentController.destroy)
+
+//rotas de registros dos equipamentos
+routes.post("/register", RegisterController.store)
+routes.get("/register:id", RegisterController.index)
+routes.get("/register", RegisterController.show)
 
 export default routes

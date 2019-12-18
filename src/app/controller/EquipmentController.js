@@ -44,7 +44,7 @@ class EquipmentController{
         }
 
         const {id, owner, active} = await Equipment.create(req.body)
-        console.log(active)
+
         return res.json({id, name, owner, code, active})
     }
 
