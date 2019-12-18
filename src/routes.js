@@ -7,7 +7,8 @@ import RegisterController from "./app/controller/RegisterController"
 import SessionController from "./app/controller/SessionController"
 
 import authMiddleware from "./app/middlewares/auth"
-import CheckAdminMiddleware from "./app/middlewares/auth"
+import CheckRole from "./app/middlewares/checkPermission"
+import JobsCancellationRegister from "./app/jobs/CancellationRegister"
 
 const routes = new Router()
 
@@ -16,12 +17,13 @@ routes.post("/sessions", SessionController.store)
 routes.post("/users", UserController.store)
 routes.post("/equipment", EquipmentController.store)
 
+//routes.use(JobsCancellationRegister)
 routes.use(authMiddleware)
 
 //rotas de usuários
 //routes.use("/users", CheckAdminMiddleware("admin"), UserController.show)
 routes.get("/users/:id", UserController.index)
-routes.get("/users", UserController.show)
+routes.get("/users", CheckRole("admin"), UserController.show)
 routes.put("/users/:id",  UserController.update)
 routes.delete("/users/:id", UserController.delete)
 
@@ -33,7 +35,8 @@ routes.delete("/equipment/:id", EquipmentController.destroy)
 
 //rotas de registros dos equipamentos
 routes.post("/register", RegisterController.store)
-routes.get("/register:id", RegisterController.index)
+routes.delete("/register/:id", RegisterController.delete)
+routes.get("/register/:id", RegisterController.index) 
 routes.get("/register", RegisterController.show)
 
 export default routes

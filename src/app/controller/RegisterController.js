@@ -10,9 +10,9 @@ class RegisterController{
     async index(req, res){
         const {id} = req.params
 
-        
+        const register = await Register.findOne({where: {id}})        
 
-        return res.send()
+        return res.json(register)
 
     }
 
@@ -81,6 +81,22 @@ class RegisterController{
 
 
         return res.json(register)
+    }
+
+    async delete(req, res){
+        const register = await Register.findByPk(req.params.id)
+
+        if(register.user_id != req.userId){
+            return res.status(401)
+            .json({error:"You don't have permission to cancel this registration"})
+        }
+        
+        register.canceled_at = new Date()
+
+        await register.save()
+
+        return res.json(register)
+
     }
 }
 
