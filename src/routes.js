@@ -10,6 +10,10 @@ import authMiddleware from "./app/middlewares/auth"
 import CheckRole from "./app/middlewares/checkPermission"
 import JobsCancellationRegister from "./app/jobs/CancellationRegister"
 
+import {scheduleJob} from "node-schedule"
+
+scheduleJob('*/1 * * * *', JobsCancellationRegister.verify)
+
 const routes = new Router()
 
 routes.post("/sessions", SessionController.store)
@@ -17,11 +21,9 @@ routes.post("/sessions", SessionController.store)
 routes.post("/users", UserController.store)
 routes.post("/equipment", EquipmentController.store)
 
-//routes.use(JobsCancellationRegister)
 routes.use(authMiddleware)
 
 //rotas de usuários
-//routes.use("/users", CheckAdminMiddleware("admin"), UserController.show)
 routes.get("/users/:id", UserController.index)
 routes.get("/users", CheckRole("admin"), UserController.show)
 routes.put("/users/:id",  UserController.update)

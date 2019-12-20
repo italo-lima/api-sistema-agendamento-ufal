@@ -3,6 +3,7 @@ import Equipment from "../models/Equipment"
 import User from "../models/User"
 
 import {isBefore, parseISO} from "date-fns"
+import pt from 'date-fns/locale/pt-BR'
 import * as Yup from "yup"
 
 class RegisterController{
@@ -57,18 +58,20 @@ class RegisterController{
 
         /* Verificando se a data atual é menor que a data que está tentando agendar */
         const checkHour = parseISO(date)
-
+        
         if(isBefore(checkHour, new Date())){
             return res.status(401).json({error: "Past dates are not permited"})
         }
 
         /* Verificando se a data está livre para agendar equipamento */
         const checkRegister = await Register.findOne({
-            id: equipment_id,
-            user_id: req.userId,
-            date
+            where:{
+                id: equipment_id,
+                user_id: req.userId,
+                date
+            }
         })
-
+        
         if(checkRegister){
             return res.status(401).json({error: "Equipment is not available"})
         }
@@ -78,7 +81,6 @@ class RegisterController{
             equipment_id,
             date
         })
-
 
         return res.json(register)
     }
