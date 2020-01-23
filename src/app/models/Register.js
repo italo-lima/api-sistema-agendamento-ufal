@@ -3,8 +3,11 @@ import Sequelize, {Model} from "sequelize"
 class Register extends Model {
     static init(sequelize){
         super.init({
-            date: Sequelize.DATE,
-            canceled_at: Sequelize.DATE
+            date_initial: Sequelize.DATE,
+            date_final: Sequelize.DATE,
+            canceled_at: Sequelize.DATE,
+            checkin: Sequelize.BOOLEAN,
+            checkout: Sequelize.BOOLEAN
         },
         {
             sequelize

@@ -12,7 +12,7 @@ import JobsCancellationRegister from "./app/jobs/CancellationRegister"
 
 import {scheduleJob} from "node-schedule"
 
-scheduleJob('*/1 * * * *', JobsCancellationRegister.verify)
+//scheduleJob('*/1 * * * *', JobsCancellationRegister.verify)
 
 const routes = new Router()
 
@@ -24,21 +24,21 @@ routes.post("/equipment", EquipmentController.store)
 routes.use(authMiddleware)
 
 //rotas de usuários
-routes.get("/users/:id", UserController.index)
+routes.get("/users/:id",CheckRole("admin"), UserController.index)
 routes.get("/users", CheckRole("admin"), UserController.show)
-routes.put("/users/:id",  UserController.update)
-routes.delete("/users/:id", UserController.delete)
+routes.put("/users/:id", UserController.update)
+routes.delete("/users/:id", CheckRole("admin"), UserController.delete)
 
 //rotas de equipamentos
-routes.get("/equipment", EquipmentController.show)
-routes.get("/equipment/:id", EquipmentController.index)
-routes.put("/equipment/:id", EquipmentController.update)
-routes.delete("/equipment/:id", EquipmentController.destroy)
+routes.get("/equipment", CheckRole("admin"), EquipmentController.show)
+routes.get("/equipment/:id", CheckRole("admin"), EquipmentController.index)
+routes.put("/equipment/:id", CheckRole("admin"), EquipmentController.update)
+routes.delete("/equipment/:id", CheckRole("admin"), EquipmentController.destroy)
 
 //rotas de registros dos equipamentos
 routes.post("/register", RegisterController.store)
 routes.delete("/register/:id", RegisterController.delete)
-routes.get("/register/:id", RegisterController.index) 
-routes.get("/register", RegisterController.show)
+routes.get("/register/:id",CheckRole("admin"), RegisterController.index) 
+routes.get("/register", CheckRole("admin"), RegisterController.show)
 
 export default routes

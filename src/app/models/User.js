@@ -13,6 +13,7 @@ class User extends Model{
                 password: Sequelize.VIRTUAL,  
                 password_hash: Sequelize.STRING,
                 role: Sequelize.STRING,
+                cpf: Sequelize.STRING
             },
             {
                 sequelize

@@ -9,7 +9,11 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
-      date: {
+      date_initial: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      date_final: {
         allowNull: false,
         type: Sequelize.DATE
       },
@@ -30,6 +34,14 @@ module.exports = {
       canceled_at: {
         type: Sequelize.DATE,
       },
+      checkin:{
+        type: Sequelize.BOOLEAN,
+        default: false
+      },
+      checkout:{
+        type: Sequelize.BOOLEAN,
+        default: false
+      },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false
@@ -39,7 +51,6 @@ module.exports = {
         allowNull: false
       }
     });
-   
   },
 
   down: (queryInterface, Sequelize) => {

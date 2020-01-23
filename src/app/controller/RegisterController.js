@@ -1,8 +1,9 @@
 import Register from "../models/Register"
 import Equipment from "../models/Equipment"
 import User from "../models/User"
+import {Op} from 'sequelize'
 
-import {isBefore, parseISO} from "date-fns"
+import {isBefore, parseISO,startOfMinute, endOfMinute, subMinutes} from "date-fns"
 import pt from 'date-fns/locale/pt-BR'
 import * as Yup from "yup"
 
@@ -13,13 +14,17 @@ class RegisterController{
 
         const register = await Register.findOne({where: {id}})        
 
+        if(!register){
+            return res.status(401).json({error: "User not found"})
+        }
+
         return res.json(register)
 
     }
 
     async show(req, res){
         const registers = await Register.findAll({
-            order:['date'],
+            order:['date_initial'],
             include:[
             {
                 model: User,
@@ -41,14 +46,15 @@ class RegisterController{
 
         const schema = Yup.object().shape({
             equipment_id: Yup.number().required(),
-            date: Yup.date().required()
+            date_initial: Yup.date().required(),
+            date_final: Yup.date().required()
         })
 
         if(!(await schema.isValid(req.body))){
             return res.status(401).json({error: "Validations Fail"})
         }
 
-        const {equipment_id, date} = req.body
+        const {equipment_id, date_initial, date_final} = req.body
 
         const checkExists = await Equipment.findOne({where: {id: equipment_id}})
         
@@ -57,21 +63,35 @@ class RegisterController{
         }
 
         /* Verificando se a data atual é menor que a data que está tentando agendar */
-        const checkHour = parseISO(date)
+        const checkHour = parseISO(date_initial)
         
         if(isBefore(checkHour, new Date())){
             return res.status(401).json({error: "Past dates are not permited"})
         }
 
+        const date_initial_parse = startOfMinute(parseISO(date_initial))
+        const date_final_parse = endOfMinute(subMinutes(parseISO(date_final), 1))
+
         /* Verificando se a data está livre para agendar equipamento */
         const checkRegister = await Register.findOne({
             where:{
-                id: equipment_id,
-                user_id: req.userId,
-                date
+                equipment_id,
+                canceled_at: {
+                    [Op.or]: [
+                        null, {[Op.not]:null}
+                    ]
+                },
+                date_initial:{
+                    [Op.between]: [
+                        date_initial_parse, date_final_parse]
+                },
+                date_final:{
+                    [Op.between]: [
+                        date_initial_parse, date_final_parse]
+                }
             }
         })
-        
+
         if(checkRegister){
             return res.status(401).json({error: "Equipment is not available"})
         }
@@ -79,7 +99,8 @@ class RegisterController{
         const register = await Register.create({
             user_id: req.userId,
             equipment_id,
-            date
+            date_initial: date_initial_parse,
+            date_final: date_final_parse
         })
 
         return res.json(register)
