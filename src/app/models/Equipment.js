@@ -7,7 +7,8 @@ class Equipment extends Model {
                 name: Sequelize.STRING,
                 owner: Sequelize.STRING,
                 code: Sequelize.STRING,
-                active: Sequelize.BOOLEAN
+                active: Sequelize.BOOLEAN,
+                color: Sequelize.STRING,
             },
             {
                 sequelize
