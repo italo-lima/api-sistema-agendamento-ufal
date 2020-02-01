@@ -8,8 +8,8 @@ class UserController{
         const users = await User.findAll()
 
         const usersDestruct = []
-        users.forEach(({first_name, last_name, email, role, registration, office}) => 
-        usersDestruct.push({first_name, last_name, email, role, registration, office}))
+        users.forEach(({id,first_name, last_name, email, role, registration, office}) => 
+        usersDestruct.push({id,first_name, last_name, email, role, registration, office}))
         
         return res.json(usersDestruct)
     }
@@ -25,6 +25,7 @@ class UserController{
 
         const {first_name, last_name, email, role, registration, office} = user
 
+        console.log("result", first_name, last_name, email, role, registration, office)
         return res.json({first_name, last_name, email, role, registration, office})
     }
 

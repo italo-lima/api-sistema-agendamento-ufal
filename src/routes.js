@@ -18,15 +18,13 @@ const routes = new Router()
 
 routes.post("/sessions", SessionController.store)
 
-routes.post("/users", UserController.store)
-routes.post("/equipment", EquipmentController.store)
-
 routes.use(authMiddleware)
 
 //rotas de usuários
 routes.get("/users/:id",CheckRole("admin"), UserController.index)
 routes.get("/users", CheckRole("admin"), UserController.show)
 routes.put("/users/:id", UserController.update)
+routes.post("/users", CheckRole("admin"), UserController.store)
 routes.delete("/users/:id", CheckRole("admin"), UserController.delete)
 
 //rotas de equipamentos
@@ -34,6 +32,7 @@ routes.get("/equipment", CheckRole("admin"), EquipmentController.show)
 routes.get("/equipment/:id", CheckRole("admin"), EquipmentController.index)
 routes.put("/equipment/:id", CheckRole("admin"), EquipmentController.update)
 routes.delete("/equipment/:id", CheckRole("admin"), EquipmentController.destroy)
+routes.post("/equipment/", CheckRole("admin"), EquipmentController.store)
 
 //rotas de registros dos equipamentos
 routes.post("/register", RegisterController.store)

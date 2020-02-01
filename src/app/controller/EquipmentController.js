@@ -28,7 +28,8 @@ class EquipmentController{
         const schema = Yup.object().shape({
             name: Yup.string().required(),
             owner: Yup.string().required(),
-            code: Yup.string().required()
+            code: Yup.string().required(),
+            color: Yup.string().required(),
         })
 
         if(!(await schema.isValid(req.body))){
@@ -53,7 +54,8 @@ class EquipmentController{
             name: Yup.string(),
             owner: Yup.string(),
             code: Yup.string(),
-            active: Yup.boolean()
+            color: Yup.string(),
+            active: Yup.boolean(),
         })
 
         if(! (await schema.isValid(req.body))){
@@ -69,13 +71,7 @@ class EquipmentController{
         if(!equipment){
             return res.status(401).json({error: "Equipment not found"})
         }
-
-        const checkCode = await Equipment.findOne({where: {code}})
-
-        if(checkCode){
-            return res.status(401).json({error: "Equipment Code already exists"})
-        }
-
+        
         const {owner, active, name} = await equipment.update(req.body)
 
         return res.json({id, code, owner, active, name})

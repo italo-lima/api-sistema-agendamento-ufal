@@ -76,11 +76,7 @@ class RegisterController{
         const checkRegister = await Register.findOne({
             where:{
                 equipment_id,
-                canceled_at: {
-                    [Op.or]: [
-                        null, {[Op.not]:null}
-                    ]
-                },
+                canceled_at: null,
                 date_initial:{
                     [Op.between]: [
                         date_initial_parse, date_final_parse]
@@ -91,7 +87,7 @@ class RegisterController{
                 }
             }
         })
-
+                                                                                                                                                                                                                                                                                                                
         if(checkRegister){
             return res.status(401).json({error: "Equipment is not available"})
         }
@@ -109,7 +105,8 @@ class RegisterController{
     async delete(req, res){
         const register = await Register.findByPk(req.params.id)
 
-        if(register.user_id != req.userId){
+        //alterado o role, se der erro, remover ele
+        if(register.role !='admin' && register.user_id != req.userId){
             return res.status(401)
             .json({error:"You don't have permission to cancel this registration"})
         }
