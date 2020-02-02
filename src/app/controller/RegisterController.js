@@ -62,6 +62,10 @@ class RegisterController{
             return res.status(401).json({error: "Equipment not found"})
         }
 
+        if(!checkExists.active){
+            return res.status(401).json({error: "Deactivated equipment"})
+        }
+
         /* Verificando se a data atual é menor que a data que está tentando agendar */
         const checkHour = parseISO(date_initial)
         
@@ -112,6 +116,23 @@ class RegisterController{
         }
         
         register.canceled_at = new Date()
+
+        await register.save()
+
+        return res.json(register)
+
+    }
+
+    async action(req, res){
+        const register = await Register.findByPk(req.params.id)
+        const action = req.params.action
+        //alterado o role, se der erro, remover ele
+        if(register.role !='admin' && register.user_id != req.userId){
+            return res.status(401)
+            .json({error:"You don't have permission to cancel this registration"})
+        }
+        
+        action == 'checkin' ? register.checkin = true : register.checkout = true
 
         await register.save()
 

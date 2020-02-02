@@ -3,6 +3,7 @@ import { Router } from "express";
 import UserController from "./app/controller/UserController"
 import EquipmentController from "./app/controller/EquipmentController"
 import RegisterController from "./app/controller/RegisterController"
+import DashboardController from "./app/controller/DashboardController"
 
 import SessionController from "./app/controller/SessionController"
 
@@ -39,5 +40,10 @@ routes.post("/register", RegisterController.store)
 routes.delete("/register/:id", RegisterController.delete)
 routes.get("/register/:id",CheckRole("admin"), RegisterController.index) 
 routes.get("/register", CheckRole("admin"), RegisterController.show)
+routes.delete("/register/:action/:id", RegisterController.action)
+
+//dashboard
+routes.get("/dashboard/register/all", DashboardController.findRegisterIdUser) 
+
 
 export default routes
