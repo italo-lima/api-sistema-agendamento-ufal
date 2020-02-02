@@ -29,7 +29,7 @@ routes.post("/users", CheckRole("admin"), UserController.store)
 routes.delete("/users/:id", CheckRole("admin"), UserController.delete)
 
 //rotas de equipamentos
-routes.get("/equipment", CheckRole("admin"), EquipmentController.show)
+routes.get("/equipment", EquipmentController.show)
 routes.get("/equipment/:id", CheckRole("admin"), EquipmentController.index)
 routes.put("/equipment/:id", CheckRole("admin"), EquipmentController.update)
 routes.delete("/equipment/:id", CheckRole("admin"), EquipmentController.destroy)
@@ -44,6 +44,9 @@ routes.delete("/register/:action/:id", RegisterController.action)
 
 //dashboard
 routes.get("/dashboard/register/all", DashboardController.findRegisterIdUser) 
+routes.get("/dashboard/information-initial", DashboardController.informationInitial) 
+routes.get("/dashboard/all-registers", DashboardController.graphicAllRegisters) 
+routes.get("/dashboard/all-registers-users", DashboardController.graphicAllRegistersUser) 
 
 
 export default routes
